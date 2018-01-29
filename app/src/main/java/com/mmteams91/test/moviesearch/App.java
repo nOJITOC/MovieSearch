@@ -1,5 +1,7 @@
 package com.mmteams91.test.moviesearch;
 
+import android.content.Context;
+
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerApplication;
 
@@ -8,6 +10,7 @@ import dagger.android.support.DaggerApplication;
  */
 
 public class App extends DaggerApplication {
+
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         return null;

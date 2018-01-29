@@ -10,11 +10,11 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Михаил on 29.01.2018.
@@ -22,8 +22,13 @@ import rx.schedulers.Schedulers;
 @Module
 public class NetworkModule {
 
+    @Provides
+    @Singleton
+    RestApi makeRest(Retrofit retrofit){
+        return retrofit.create(RestApi.class);
+    }
 
-    RestApi makeRest(){
+    private RestApi makeRest() {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(AppConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(AppConfig.READ_TIMEOUT,TimeUnit.SECONDS)
@@ -32,7 +37,7 @@ public class NetworkModule {
                 .baseUrl(AppConfig.BASE_URL)
                 .client(client)
                 .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
         return retrofit.create(RestApi.class);
     }
