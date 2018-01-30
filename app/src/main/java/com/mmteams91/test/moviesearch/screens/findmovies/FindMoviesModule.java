@@ -4,7 +4,6 @@ import com.mmteams91.test.moviesearch.di.ScreenScope;
 
 import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
 
 /**
  * Created by Михаил on 29.01.2018.

@@ -10,13 +10,18 @@ import io.reactivex.Observable;
 public class NetworkStatusChecker {
 
 
-    public static Boolean isNetworkAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+    private final ConnectivityManager connectivityManager;
+
+    public NetworkStatusChecker(Context context) {
+        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
+    public Boolean isNetworkAvailable() {
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    public static Observable<Boolean> isNetworkAvailableReactive(Context context) {
-        return Observable.just(isNetworkAvailable(context));
+    public Observable<Boolean> isNetworkAvailableReactive() {
+        return Observable.just(isNetworkAvailable());
     }
 }
