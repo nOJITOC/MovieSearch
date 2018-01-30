@@ -11,9 +11,7 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class ScreenBindingModule {
-
-    @ScreenScope
+    @ActivityScope
     @ContributesAndroidInjector(modules = FindMoviesModule.class)
     abstract FindMoviesFragment findMoviesFragment();
-
 }

@@ -1,6 +1,6 @@
 package com.mmteams91.test.moviesearch.screens.findmovies;
 
-import com.mmteams91.test.moviesearch.data.network.dto.MovieDto;
+import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.screens.Screen;
 import com.mmteams91.test.moviesearch.screens.base.BasePresenter;
 
@@ -17,11 +17,14 @@ public interface FindMoviesContract {
 
         void loadMovies(String query);
 
-        void onMovieClick(MovieDto movieDto);
+        void onMovieClick(FindMovieDto movieDto);
+
     }
 
     interface View extends Screen<Presenter> {
-        void addMovies(List<MovieDto> movies);
+        void addMovies(List<FindMovieDto> movies);
         String getKeyboardLocale();
+
+        void clearPrevResult();
     }
 }

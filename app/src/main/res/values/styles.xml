@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextLabel" parent="Text">
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/text_12</item>
+        <item name="android:textColor">@color/colorGray7</item>
+    </style>
+
+    <style name="TextData" parent="Text">
+        <item name="android:padding">4dp</item>
+        <item name="android:textSize">@dimen/text_16</item>
+        <item name="android:textColor">@color/colorGray8</item>
+    </style>
+
+    <style name="Text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 </resources>

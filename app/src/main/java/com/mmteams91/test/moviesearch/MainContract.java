@@ -1,9 +1,7 @@
 package com.mmteams91.test.moviesearch;
 
 
-import android.support.v4.app.Fragment;
-
-import com.mmteams91.test.moviesearch.data.network.dto.MovieDto;
+import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.screens.base.BasePresenter;
 import com.mmteams91.test.moviesearch.screens.base.BaseView;
 
@@ -13,12 +11,15 @@ import com.mmteams91.test.moviesearch.screens.base.BaseView;
 
 public interface MainContract {
     interface Presenter extends BasePresenter<View>{
-        void setMovie(MovieDto movie);
+        void setMovie(FindMovieDto movie, String language);
+
+        FindMovieDto getClickedMovieRes();
+
+        String getLanguage();
     }
 
     interface View extends BaseView<Presenter>{
-        void showMovieInfo(MovieDto movie);
+        void showMovieInfo(FindMovieDto movie, String language);
         void showMovies();
-        void addFragment(Fragment fragment);
     }
 }

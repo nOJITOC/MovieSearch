@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 
 
@@ -12,6 +14,7 @@ public class NetworkStatusChecker {
 
     private final ConnectivityManager connectivityManager;
 
+    @Inject
     public NetworkStatusChecker(Context context) {
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }

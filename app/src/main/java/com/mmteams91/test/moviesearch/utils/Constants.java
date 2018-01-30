@@ -5,4 +5,5 @@ package com.mmteams91.test.moviesearch.utils;
  */
 
 public interface Constants {
+    String DEFAULT_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
 }

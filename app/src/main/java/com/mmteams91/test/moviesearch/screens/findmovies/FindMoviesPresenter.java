@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.mmteams91.test.moviesearch.MainContract;
 import com.mmteams91.test.moviesearch.data.network.RestApi;
-import com.mmteams91.test.moviesearch.data.network.dto.MovieDto;
+import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -21,7 +21,6 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
     private static final String TAG = "FindMoviesPresenter";
     private FindMoviesContract.View view;
     private RestApi api;
-    @Inject
     MainContract.Presenter mainPresenter;
     String query;
     private int page = 1;
@@ -29,8 +28,9 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
     private String language;
 
     @Inject
-    public FindMoviesPresenter(RestApi api) {
+    public FindMoviesPresenter(MainContract.Presenter mainPresenter, RestApi api) {
         this.api = api;
+        this.mainPresenter = mainPresenter;
     }
 
     @Override
@@ -45,6 +45,7 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
         language = checkLanguage(query);
         this.query = query;
         page = 1;
+        view.clearPrevResult();
         findNextMovies();
     }
 
@@ -84,8 +85,9 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
     }
 
     @Override
-    public void onMovieClick(MovieDto movieDto) {
-        mainPresenter.setMovie(movieDto);
+    public void onMovieClick(FindMovieDto movieDto) {
+        Log.e(TAG, "onMovieClick: " + movieDto.getTitle());
+        mainPresenter.setMovie(movieDto, language);
     }
 
     @Override

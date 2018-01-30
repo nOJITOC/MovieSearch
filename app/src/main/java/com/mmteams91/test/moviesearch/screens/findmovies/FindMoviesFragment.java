@@ -12,7 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
 import com.mmteams91.test.moviesearch.R;
-import com.mmteams91.test.moviesearch.data.network.dto.MovieDto;
+import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 
 import java.util.List;
 
@@ -68,11 +68,17 @@ public class FindMoviesFragment extends DaggerFragment implements FindMoviesCont
                 return false;
             }
         });
+
         return view;
     }
 
     @Override
-    public void addMovies(List<MovieDto> movies) {
+    public void clearPrevResult() {
+        adapter.clear();
+    }
+
+    @Override
+    public void addMovies(List<FindMovieDto> movies) {
         adapter.addItems(movies);
     }
 

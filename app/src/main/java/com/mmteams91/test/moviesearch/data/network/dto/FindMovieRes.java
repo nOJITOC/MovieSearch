@@ -14,7 +14,7 @@ public class FindMovieRes {
     @Json(name = "total_pages")
     private Integer totalPages;
     @Json(name = "results")
-    private List<MovieDto> results = null;
+    private List<FindMovieDto> results = null;
 
     public Integer getPage() {
         return page;
@@ -40,11 +40,11 @@ public class FindMovieRes {
         this.totalPages = totalPages;
     }
 
-    public List<MovieDto> getResults() {
+    public List<FindMovieDto> getResults() {
         return results;
     }
 
-    public void setResults(List<MovieDto> results) {
+    public void setResults(List<FindMovieDto> results) {
         this.results = results;
     }
 

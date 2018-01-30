@@ -1,6 +1,6 @@
 package com.mmteams91.test.moviesearch.screens.findmovies;
 
-import com.mmteams91.test.moviesearch.di.ScreenScope;
+import com.mmteams91.test.moviesearch.di.ActivityScope;
 
 import dagger.Binds;
 import dagger.Module;
@@ -10,7 +10,7 @@ import dagger.Module;
  */
 @Module
 public abstract class FindMoviesModule {
-    @ScreenScope
+    @ActivityScope
     @Binds
     abstract FindMoviesContract.Presenter providePresenter(FindMoviesPresenter presenter);
 }

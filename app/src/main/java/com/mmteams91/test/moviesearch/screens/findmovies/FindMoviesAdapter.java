@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mmteams91.test.moviesearch.R;
-import com.mmteams91.test.moviesearch.data.network.dto.MovieDto;
+import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.ui.OnItemClickListener;
 
 import java.util.ArrayList;
@@ -21,9 +21,9 @@ import java.util.List;
  */
 
 public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.MovieViewHolder> {
-    List<MovieDto> movies = new ArrayList<>();
+    List<FindMovieDto> movies = new ArrayList<>();
     OnLastItemBindListener onLastItemBindListener;
-    OnItemClickListener<MovieDto> onItemClickListener;
+    OnItemClickListener<FindMovieDto> onItemClickListener;
 
     public FindMoviesAdapter() {
     }
@@ -33,20 +33,20 @@ public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.Mo
         final MovieViewHolder holder = new MovieViewHolder(parent);
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener == null) return;
-            MovieDto movie = movies.get(holder.getAdapterPosition());
+            FindMovieDto movie = movies.get(holder.getAdapterPosition());
             onItemClickListener.onClick(movie);
         });
-        return new MovieViewHolder(parent);
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         if (isLastItem(position) && onLastItemBindListener != null)
             onLastItemBindListener.onLastItemBind();
-        MovieDto movie = movies.get(position);
+        FindMovieDto movie = movies.get(position);
         holder.title.setText(movie.getTitle());
         Glide.with(holder.itemView.getContext())
-                .load(movie.getPosterPath())
+                .load("http://image.tmdb.org/t/p/w500"+movie.getPosterPath())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.image);
@@ -60,14 +60,14 @@ public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.Mo
         movies = new ArrayList<>();
         notifyDataSetChanged();
     }
-    public void addItems(Collection<MovieDto> movies) {
+    public void addItems(Collection<FindMovieDto> movies) {
         int first = getItemCount();
         int size = movies.size();
         this.movies.addAll(movies);
         notifyItemRangeChanged(first, size);
     }
 
-    public void setOnItemClickListener(OnItemClickListener<MovieDto> onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener<FindMovieDto> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
