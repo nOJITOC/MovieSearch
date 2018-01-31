@@ -1,7 +1,9 @@
 package com.mmteams91.test.moviesearch.screens.showmovie;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.mmteams91.test.moviesearch.R;
 import com.mmteams91.test.moviesearch.data.managers.DataManager;
 import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.data.network.dto.Genre;
@@ -77,11 +79,12 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
     }
 
     private List<DataWithLabelAdapter.Item> convertToInfoList(MovieDto movieDto) {
+
         List<DataWithLabelAdapter.Item> info = new ArrayList<>();
         if (stringValidate(movieDto.getOverview()))
-            info.add(new DataWithLabelAdapter.Item("Описание", movieDto.getOverview()));
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.overview), movieDto.getOverview()));
         if (stringValidate(movieDto.getReleaseDate()))
-            info.add(new DataWithLabelAdapter.Item("Дата выхода", movieDto.getReleaseDate()));
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.release_date), movieDto.getReleaseDate()));
         if (listValidate(movieDto.getGenres())) {
             String genres = "";
             for (Genre genre : movieDto.getGenres()) {

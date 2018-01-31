@@ -1,5 +1,7 @@
 package com.mmteams91.test.moviesearch.screens.showmovie;
 
+import android.support.annotation.StringRes;
+
 import com.mmteams91.test.moviesearch.MainContract;
 import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.screens.base.BasePresenter;
@@ -20,11 +22,15 @@ public class ShowMovieContract {
     interface View extends BaseView<MainContract.Presenter> {
 
         void showTitle(String title);
+
         void showPoster(String posterUri);
+
         void showInfo(Collection<DataWithLabelAdapter.Item> info);
 
         FindMovieDto getClickedMovieDto();
 
         String getLanguage();
+
+        String getLocalizedString(@StringRes int stringId);
     }
 }

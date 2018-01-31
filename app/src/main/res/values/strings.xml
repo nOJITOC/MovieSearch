@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">MovieSearch</string>
-    <string name="title_activity_show_movie">ShowMovieActivity</string>
+    <string name="app_name">Поиск фильмов</string>
+    <string name="title_activity_show_movie">Фильм</string>
     <string name="search_title">искать фильм</string>
     <string name="find_movie_title">Фильмы</string>
+    <string name="overview">Описание</string>
+    <string name="release_date">Дата выхода</string>
 </resources>

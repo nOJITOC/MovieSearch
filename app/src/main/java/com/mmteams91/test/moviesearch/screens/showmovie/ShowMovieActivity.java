@@ -1,7 +1,10 @@
 package com.mmteams91.test.moviesearch.screens.showmovie;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +20,7 @@ import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.screens.findmovies.FindMoviesActivity;
 
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -31,6 +35,7 @@ public class ShowMovieActivity extends DaggerAppCompatActivity implements ShowMo
     private RecyclerView infoContainer;
     private DataWithLabelAdapter adapter;
     private Toolbar toolbar;
+    private Resources localizedResources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,7 @@ public class ShowMovieActivity extends DaggerAppCompatActivity implements ShowMo
         adapter = new DataWithLabelAdapter();
         infoContainer.setAdapter(adapter);
         infoContainer.addItemDecoration(new InfoSpacingItemDecoration(getResources().getDimensionPixelSize(R.dimen.spacing_info)));
-        infoContainer.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        infoContainer.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         presenter.takeView(this);
         presenter.onCreateView();
     }
@@ -66,6 +71,29 @@ public class ShowMovieActivity extends DaggerAppCompatActivity implements ShowMo
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public String getLocalizedString(@StringRes int stringId) {
+        return getLocalizedResources().getString(stringId);
+    }
+
+    private Resources getLocalizedResources() {
+        if (localizedResources == null) {
+            Locale locale = getLocale(getLanguage());
+            Configuration configuration = new Configuration(getResources().getConfiguration());
+            configuration.setLocale(locale);
+            localizedResources = createConfigurationContext(configuration).getResources();
+        }
+        return localizedResources;
+    }
+
+    private Locale getLocale(String language) {
+        String[] split = language.split("\\W");
+        if (split.length == 0)
+            return new Locale("ru");
+        else
+            return new Locale(split[0]);
     }
 
     @Override
