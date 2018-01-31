@@ -1,14 +1,10 @@
 package com.mmteams91.test.moviesearch.screens.findmovies;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.mmteams91.test.moviesearch.MainContract;
 import com.mmteams91.test.moviesearch.data.managers.DataManager;
 import com.mmteams91.test.moviesearch.data.network.NetworkObserver;
-import com.mmteams91.test.moviesearch.data.network.RestApi;
 import com.mmteams91.test.moviesearch.data.network.dto.ConfigureDto;
-import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.di.ActivityScope;
 
 import java.util.List;
@@ -114,6 +110,11 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
     @Override
     public String getLanguage() {
         return language;
+    }
+
+    @Override
+    public String getImageUri() {
+        return dataManager.getBaseImageUrl() + dataManager.getPosterSize();
     }
 
     @Override

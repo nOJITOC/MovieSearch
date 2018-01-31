@@ -19,6 +19,7 @@ public interface FindMoviesContract {
 
         String getLanguage();
 
+        String getImageUri();
     }
 
     interface View extends Screen<Presenter> {

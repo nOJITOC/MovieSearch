@@ -10,6 +10,7 @@ import dagger.Module;
  */
 @Module
 public abstract class FindMoviesModule {
+
     @ActivityScope
     @Binds
     abstract FindMoviesContract.Presenter providePresenter(FindMoviesPresenter presenter);

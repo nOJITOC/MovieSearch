@@ -24,8 +24,10 @@ public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.Mo
     List<FindMovieDto> movies = new ArrayList<>();
     OnLastItemBindListener onLastItemBindListener;
     OnItemClickListener<FindMovieDto> onItemClickListener;
+    String baseImageUri;
 
-    public FindMoviesAdapter() {
+    public FindMoviesAdapter(String baseImageUri) {
+        this.baseImageUri = baseImageUri;
     }
 
     @Override
@@ -46,8 +48,8 @@ public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.Mo
         FindMovieDto movie = movies.get(position);
         holder.title.setText(movie.getTitle());
         Glide.with(holder.itemView.getContext())
-                .load("http://image.tmdb.org/t/p/w500" + movie.getPosterPath())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .load(baseImageUri + movie.getPosterPath())
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.image);
     }

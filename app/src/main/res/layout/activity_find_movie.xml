@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.mmteams91.test.moviesearch.MainActivity">
+    android:layout_height="match_parent">
+
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/search"
+
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/movie_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/size_16dp"
-            android:paddingRight="@dimen/size_16dp"
             app:layoutManager="android.support.v7.widget.GridLayoutManager"
             app:spanCount="3" />
 
@@ -29,4 +37,4 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

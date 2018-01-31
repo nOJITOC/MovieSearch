@@ -32,7 +32,7 @@ public class MovieDto {
     @Json(name = "popularity")
     private Double popularity;
     @Json(name = "poster_path")
-    private Object posterPath;
+    private String posterPath;
     @Json(name = "production_companies")
     private List<ProductionCompany> productionCompanies = null;
     @Json(name = "production_countries")
@@ -154,11 +154,11 @@ public class MovieDto {
         this.popularity = popularity;
     }
 
-    public Object getPosterPath() {
+    public String getPosterPath() {
         return posterPath;
     }
 
-    public void setPosterPath(Object posterPath) {
+    public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
 

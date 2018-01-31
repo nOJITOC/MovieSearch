@@ -3,6 +3,7 @@ package com.mmteams91.test.moviesearch.data.managers;
 import com.mmteams91.test.moviesearch.data.network.RestApi;
 import com.mmteams91.test.moviesearch.data.network.dto.ConfigureDto;
 import com.mmteams91.test.moviesearch.data.network.dto.FindMovieRes;
+import com.mmteams91.test.moviesearch.data.network.dto.MovieDto;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -46,5 +47,17 @@ public class DataManager {
 
     public Observable<FindMovieRes> findMovies(String query, String language, int page) {
         return api.findMovies(query, language, page);
+    }
+
+    public Observable<MovieDto> loadMovie(Integer id, String language) {
+        return api.getMovie(id, language);
+    }
+
+    public String getPosterSize() {
+        return preferenceManager.getPosterSize();
+    }
+
+    public String getBaseImageUrl() {
+        return preferenceManager.getBaseImageUrl();
     }
 }

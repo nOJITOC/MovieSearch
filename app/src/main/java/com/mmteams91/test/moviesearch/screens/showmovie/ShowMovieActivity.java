@@ -1,13 +1,12 @@
 package com.mmteams91.test.moviesearch.screens.showmovie;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.ImageViewCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,52 +14,88 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mmteams91.test.moviesearch.R;
 import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
-import com.mmteams91.test.moviesearch.data.network.dto.MovieDto;
 import com.mmteams91.test.moviesearch.screens.findmovies.FindMoviesActivity;
+
+import java.util.Collection;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class ShowMovieActivity extends DaggerAppCompatActivity implements ShowMovieContract.View {
+    private static final String TAG = "ShowMovieActivity";
     @Inject
     ShowMovieContract.Presenter presenter;
     private ImageView poster;
     private TextView title;
     private RecyclerView infoContainer;
+    private DataWithLabelAdapter adapter;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_movie);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        prepareToolbar();
         poster = findViewById(R.id.image);
         title = findViewById(R.id.title);
         infoContainer = findViewById(R.id.info_container);
+        adapter = new DataWithLabelAdapter();
+        infoContainer.setAdapter(adapter);
+        infoContainer.addItemDecoration(new InfoSpacingItemDecoration(getResources().getDimensionPixelSize(R.dimen.spacing_info)));
+        infoContainer.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         presenter.takeView(this);
         presenter.onCreateView();
     }
 
+    private void prepareToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     protected void onDestroy() {
+        Log.e(TAG, "onDestroy: ");
         super.onDestroy();
         presenter.dropView();
     }
 
     @Override
-    public void showPreview(FindMovieDto preview) {
-        title.setText(preview.getTitle());
+    public void showTitle(String title) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(title);
+        this.title.setText(title);
+    }
+
+    @Override
+    public void showPoster(String posterUri) {
+        Drawable drawable = poster.getDrawable() == null ? getResources().getDrawable(R.drawable.placeholder) : poster.getDrawable();
         Glide.with(this)
-                .load("http://image.tmdb.org/t/p/original" + preview.getPosterPath())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .load(posterUri)
+                .placeholder(drawable)
+                .error(drawable)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(poster);
     }
 
     @Override
-    public void showMovie(MovieDto movieDto) {
-
+    public void showInfo(Collection<DataWithLabelAdapter.Item> info) {
+        adapter.addItems(info);
     }
 
     @Override
