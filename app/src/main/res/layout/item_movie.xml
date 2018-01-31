@@ -9,10 +9,11 @@
         android:layout_height="wrap_content"
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
+
         tools:src="@drawable/placeholder"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_24"
+        android:textSize="@dimen/text_12"
         tools:text = "Film film movie"/>
 </LinearLayout>

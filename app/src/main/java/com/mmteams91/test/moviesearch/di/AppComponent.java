@@ -1,12 +1,8 @@
 package com.mmteams91.test.moviesearch.di;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.mmteams91.test.moviesearch.App;
-import com.mmteams91.test.moviesearch.MainActivity;
-import com.mmteams91.test.moviesearch.MainContract;
-import com.mmteams91.test.moviesearch.data.network.RestApi;
 
 import javax.inject.Singleton;
 
@@ -22,17 +18,10 @@ import retrofit2.Retrofit;
         ApplicationModule.class,
         NetworkModule.class,
         StorageModule.class,
-        ScreenBindingModule.class,
-        MainActivity.Module.class,
+        ActivityBindingModule.class,
         AndroidSupportInjectionModule.class,
 })
 public interface AppComponent extends AndroidInjector<App> {
-
-    RestApi getRest();
-
-    Context getContext();
-
-    MainContract.Presenter getMainPresenter();
 
     // Gives us syntactic sugar. we can then do DaggerAppComponent.builder().application(this).build().inject(this);
     // never having to instantiate any modules or say which module we are passing the application to.

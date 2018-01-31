@@ -17,14 +17,19 @@ public interface FindMoviesContract {
 
         void loadMovies(String query);
 
-        void onMovieClick(FindMovieDto movieDto);
+        String getLanguage();
 
     }
 
     interface View extends Screen<Presenter> {
         void addMovies(List<FindMovieDto> movies);
+
         String getKeyboardLocale();
 
         void clearPrevResult();
+
+        int getDisplayWidth();
+
+        int getMovieContainerPadding();
     }
 }

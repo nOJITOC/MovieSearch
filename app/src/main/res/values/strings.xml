@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MovieSearch</string>
+    <string name="title_activity_show_movie">ShowMovieActivity</string>
 </resources>

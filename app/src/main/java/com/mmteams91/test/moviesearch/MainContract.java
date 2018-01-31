@@ -1,6 +1,7 @@
 package com.mmteams91.test.moviesearch;
 
 
+import com.mmteams91.test.moviesearch.data.network.dto.ConfigureDto;
 import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.screens.base.BasePresenter;
 import com.mmteams91.test.moviesearch.screens.base.BaseView;
@@ -10,16 +11,23 @@ import com.mmteams91.test.moviesearch.screens.base.BaseView;
  */
 
 public interface MainContract {
-    interface Presenter extends BasePresenter<View>{
+    interface Presenter extends BasePresenter<View> {
         void setMovie(FindMovieDto movie, String language);
+
+        void saveConfig(ConfigureDto configureDto);
 
         FindMovieDto getClickedMovieRes();
 
         String getLanguage();
     }
 
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView<Presenter> {
         void showMovieInfo(FindMovieDto movie, String language);
+
         void showMovies();
+
+        int getDisplayWidth();
+
+        int dpToPx(int dp);
     }
 }

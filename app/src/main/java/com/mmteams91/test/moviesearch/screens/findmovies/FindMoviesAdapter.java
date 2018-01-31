@@ -34,7 +34,7 @@ public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.Mo
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener == null) return;
             FindMovieDto movie = movies.get(holder.getAdapterPosition());
-            onItemClickListener.onClick(movie);
+            onItemClickListener.onClick(holder.itemView, movie);
         });
         return holder;
     }
@@ -46,7 +46,7 @@ public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.Mo
         FindMovieDto movie = movies.get(position);
         holder.title.setText(movie.getTitle());
         Glide.with(holder.itemView.getContext())
-                .load("http://image.tmdb.org/t/p/w500"+movie.getPosterPath())
+                .load("http://image.tmdb.org/t/p/w500" + movie.getPosterPath())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.image);
@@ -56,10 +56,11 @@ public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.Mo
         return getItemCount() != 0 && position == getItemCount() - 1;
     }
 
-    public void clear(){
+    public void clear() {
         movies = new ArrayList<>();
         notifyDataSetChanged();
     }
+
     public void addItems(Collection<FindMovieDto> movies) {
         int first = getItemCount();
         int size = movies.size();

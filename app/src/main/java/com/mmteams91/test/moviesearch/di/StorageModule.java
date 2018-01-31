@@ -1,5 +1,6 @@
 package com.mmteams91.test.moviesearch.di;
 
+import com.mmteams91.test.moviesearch.data.managers.DataManager;
 import com.mmteams91.test.moviesearch.data.managers.PreferenceManager;
 
 import javax.inject.Singleton;
@@ -11,6 +12,8 @@ import dagger.Module;
  */
 @Module
 abstract class StorageModule {
+    @Singleton
+    abstract DataManager dataManager();
     @Singleton
     abstract PreferenceManager preferenceManager();
 }

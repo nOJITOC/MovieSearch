@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import retrofit2.HttpException;
 
-@ScreenScope
 public class ShowMoviePresenter implements ShowMovieContract.Presenter {
 
     private static final String TAG = "ShowMoviePresenter";
@@ -32,8 +31,7 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
     }
 
     @Override
-    public void takeView(ShowMovieContract.View view) {
-        this.view = view;
+    public void onCreateView() {
         view.showPreview(preview);
         api.getMovie(preview.getId(), language)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -44,8 +42,13 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
                 });
     }
 
+    @Override
+    public void takeView(ShowMovieContract.View view) {
+        this.view = view;
+    }
+
     private void prepareInfo(MovieDto movieDto) {
-        Map<String,String> movieInfo = new HashMap<>();
+        Map<String, String> movieInfo = new HashMap<>();
         // TODO: 30.01.2018 implement 
 
     }

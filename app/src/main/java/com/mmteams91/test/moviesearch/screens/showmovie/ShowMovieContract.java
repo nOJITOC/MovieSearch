@@ -13,6 +13,7 @@ import com.mmteams91.test.moviesearch.screens.base.BaseView;
 public class ShowMovieContract {
     interface Presenter extends BasePresenter<View> {
 
+        void onCreateView();
     }
 
     interface View extends BaseView<MainContract.Presenter> {
@@ -20,5 +21,9 @@ public class ShowMovieContract {
         void showPreview(FindMovieDto preview);
 
         void showMovie(MovieDto movieDto);
+
+        FindMovieDto getClickedMovieDto();
+
+        String getLanguage();
     }
 }

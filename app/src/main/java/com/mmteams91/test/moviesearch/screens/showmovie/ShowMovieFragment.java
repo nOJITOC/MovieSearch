@@ -46,13 +46,9 @@ public class ShowMovieFragment extends DaggerFragment implements ShowMovieContra
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         presenter.takeView(this);
     }
+
 
     @Override
     public void onDestroy() {
@@ -66,6 +62,7 @@ public class ShowMovieFragment extends DaggerFragment implements ShowMovieContra
         View view = inflater.inflate(R.layout.fragment_show_movie, container, false);
         title = view.findViewById(R.id.title);
         image = view.findViewById(R.id.image);
+        presenter.onCreateView();
         return view;
     }
 
@@ -84,24 +81,13 @@ public class ShowMovieFragment extends DaggerFragment implements ShowMovieContra
 
     }
 
-    @dagger.Module
-    public abstract static class Module {
-        @Provides
-        @ScreenScope
-        static FindMovieDto provideMovieRes(MainContract.Presenter findMoviesPresenter) {
-            return findMoviesPresenter.getClickedMovieRes();
-        }
-
-        @Provides
-        @ScreenScope
-        static String provideLanguage(MainContract.Presenter findMoviesPresenter) {
-            return findMoviesPresenter.getLanguage();
-        }
-
-        @Binds
-        @ScreenScope
-        abstract ShowMovieContract.Presenter presenter(ShowMoviePresenter presenter);
-
+    @Override
+    public FindMovieDto getClickedMovieDto() {
+        return null;
     }
 
+    @Override
+    public String getLanguage() {
+        return null;
+    }
 }

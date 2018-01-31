@@ -6,7 +6,7 @@ import com.squareup.moshi.Json;
  * Created by User New on 30.01.2018.
  */
 
-public class ConfigureRes {
+public class ConfigureDto {
     @Json(name = "images")
     private ImagesConfig images;
 

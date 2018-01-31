@@ -1,12 +1,19 @@
 package com.mmteams91.test.moviesearch.screens.findmovies;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.mmteams91.test.moviesearch.MainContract;
+import com.mmteams91.test.moviesearch.data.managers.DataManager;
+import com.mmteams91.test.moviesearch.data.network.NetworkObserver;
 import com.mmteams91.test.moviesearch.data.network.RestApi;
+import com.mmteams91.test.moviesearch.data.network.dto.ConfigureDto;
 import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
+import com.mmteams91.test.moviesearch.di.ActivityScope;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
@@ -16,28 +23,47 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 /**
  * Created by Михаил on 29.01.2018.
  */
-
+@ActivityScope
 public class FindMoviesPresenter implements FindMoviesContract.Presenter {
     private static final String TAG = "FindMoviesPresenter";
+    private final DataManager dataManager;
     private FindMoviesContract.View view;
-    private RestApi api;
-    MainContract.Presenter mainPresenter;
     String query;
     private int page = 1;
     private int pageCount = 1;
     private String language;
 
     @Inject
-    public FindMoviesPresenter(MainContract.Presenter mainPresenter, RestApi api) {
-        this.api = api;
-        this.mainPresenter = mainPresenter;
+    public FindMoviesPresenter(DataManager dataManager) {
+        this.dataManager = dataManager;
     }
 
     @Override
     public void takeView(FindMoviesContract.View view) {
         this.view = view;
-        if (query != null)
-            loadMovies(query);
+        dataManager
+                .loadConfig()
+                .subscribe(new NetworkObserver<ConfigureDto>() {
+                    @Override
+                    public void onNext(ConfigureDto value) {
+                        saveConfig(value);
+                    }
+                });
+
+    }
+
+    private void saveConfig(ConfigureDto configureDto) {
+        dataManager.saveBaseImageUrl(configureDto.getImages().getBaseUrl());
+        int requiredWidth = (view.getDisplayWidth() - view.getMovieContainerPadding()) / 3;
+        List<String> posterSizes = configureDto.getImages().getPosterSizes();
+        Pattern digitsPattern = Pattern.compile("\\d+");
+        for (String posterSize : posterSizes) {
+            Matcher matcher = digitsPattern.matcher(posterSize);
+            if (matcher.find() && requiredWidth <= Integer.parseInt(matcher.group())) {
+                dataManager.savePosterSize(posterSize);
+                break;
+            }
+        }
     }
 
     @Override
@@ -51,7 +77,7 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
 
     private void findNextMovies() {
         if (pageCount >= page) {
-            api.findMovies(query, language, page)
+            dataManager.findMovies(query, language, page)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(movieRes -> {
                         pageCount = movieRes.getTotalPages();
@@ -84,10 +110,10 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
         findNextMovies();
     }
 
+
     @Override
-    public void onMovieClick(FindMovieDto movieDto) {
-        Log.e(TAG, "onMovieClick: " + movieDto.getTitle());
-        mainPresenter.setMovie(movieDto, language);
+    public String getLanguage() {
+        return language;
     }
 
     @Override
