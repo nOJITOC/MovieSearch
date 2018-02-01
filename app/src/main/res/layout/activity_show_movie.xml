@@ -61,13 +61,26 @@
 
             <TextView
                 android:id="@+id/title"
+                android:layout_marginLeft="@dimen/size_16dp"
+                android:layout_marginRight="@dimen/size_16dp"
                 style="@style/TextData"
-                android:textSize="@dimen/text_24" />
+                android:textSize="@dimen/text_24"
+                tools:text="Fight club"/>
+
+            <TextView
+                android:id="@+id/tagline"
+                android:layout_marginLeft="@dimen/size_16dp"
+                android:layout_marginRight="@dimen/size_16dp"
+                style="@style/TextData"
+                android:textSize="@dimen/text_18"
+                android:visibility="gone"
+                tools:text="Fight club"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/info_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

@@ -1,8 +1,5 @@
 package com.mmteams91.test.moviesearch.screens.showmovie;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.mmteams91.test.moviesearch.R;
 import com.mmteams91.test.moviesearch.data.managers.DataManager;
 import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
@@ -16,7 +13,6 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import retrofit2.HttpException;
 
 public class ShowMoviePresenter implements ShowMovieContract.Presenter {
 
@@ -39,11 +35,7 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
         showPreview();
         compositeDisposable.add(dataManager.loadMovie(preview.getId(), language)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showMovie, throwable -> {
-                    Log.e(TAG, "accept: ", throwable);
-                    if (throwable instanceof HttpException)
-                        Log.e(TAG, "takeView: " + ((HttpException) throwable).response().raw());
-                }));
+                .subscribe(this::showMovie, throwable -> view.showError(throwable)));
     }
 
     private void showPreview() {
@@ -71,6 +63,8 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
         }
         String posterSize = "original";
         String baseUrl = dataManager.getBaseImageUrl();
+        if (stringValidate(movieDto.getTagline()))
+            view.showSubTitle(movieDto.getTagline());
         view.showTitle(title);
         if (movieDto.getPosterPath() != null && !movieDto.getPosterPath().isEmpty())
             view.showPoster(baseUrl + posterSize + movieDto.getPosterPath());
@@ -83,8 +77,6 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
         List<DataWithLabelAdapter.Item> info = new ArrayList<>();
         if (stringValidate(movieDto.getOverview()))
             info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.overview), movieDto.getOverview()));
-        if (stringValidate(movieDto.getReleaseDate()))
-            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.release_date), movieDto.getReleaseDate()));
         if (listValidate(movieDto.getGenres())) {
             String genres = "";
             for (Genre genre : movieDto.getGenres()) {
@@ -92,7 +84,7 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
                     genres += ", ";
                 genres += genre.getName();
             }
-            info.add(new DataWithLabelAdapter.Item("Жанр", genres));
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.genre), genres));
         }
         if (listValidate(movieDto.getProductionCountries())) {
             String countries = "";
@@ -101,7 +93,7 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
                     countries += ", ";
                 countries += country.getName();
             }
-            info.add(new DataWithLabelAdapter.Item("Страна", countries));
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.country), countries));
         }
         if (listValidate(movieDto.getProductionCompanies())) {
             String companies = "";
@@ -110,8 +102,42 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
                     companies += ", ";
                 companies += company.getName();
             }
-            info.add(new DataWithLabelAdapter.Item("Киностудия", companies));
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.company), companies));
         }
+        if (stringValidate(movieDto.getReleaseDate()))
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.release_date), movieDto.getReleaseDate()));
+        if (checkNotNull(movieDto.getRuntime())) {
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.runtime), String.valueOf(movieDto.getRuntime())));
+        }
+        if (checkNotNull(movieDto.getBudget())) {
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.budget), String.valueOf(movieDto.getBudget())));
+        }
+        if (checkNotNull(movieDto.getRevenue())) {
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.revenue), String.valueOf(movieDto.getRevenue())));
+        }
+        if (listValidate(movieDto.getSpokenLanguages())) {
+            String languages = "";
+            for (MovieDto.SpokenLanguage spokenLanguage : movieDto.getSpokenLanguages()) {
+                if (!languages.isEmpty())
+                    languages += ", ";
+                languages += spokenLanguage.getName();
+            }
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.language), languages));
+        }
+        if (checkNotNull(movieDto.getVoteAverage())) {
+            String vote = String.valueOf(movieDto.getVoteAverage());
+            if (checkNotNull(movieDto.getVoteCount())) {
+                vote += "/" + movieDto.getVoteCount();
+            }
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.vote), vote));
+        }
+        if (stringValidate(movieDto.getHomepage())) {
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.homepage), movieDto.getHomepage()));
+        }
+        if (checkNotNull(movieDto.getPopularity())) {
+            info.add(new DataWithLabelAdapter.Item(view.getLocalizedString(R.string.popularity), String.valueOf(movieDto.getPopularity())));
+        }
+
         return info;
     }
 
@@ -137,7 +163,7 @@ public class ShowMoviePresenter implements ShowMovieContract.Presenter {
 
     @Override
     public void dropView() {
-        compositeDisposable.dispose();
+        compositeDisposable.clear();
         this.view = null;
     }
 }

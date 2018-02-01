@@ -10,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -73,6 +75,12 @@ public class ShowMovieActivity extends DaggerAppCompatActivity implements ShowMo
         }
     }
 
+
+    @Override
+    public void showError(Throwable throwable) {
+        runOnUiThread(() -> Toast.makeText(this, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+    }
+
     @Override
     public String getLocalizedString(@StringRes int stringId) {
         return getLocalizedResources().getString(stringId);
@@ -108,6 +116,13 @@ public class ShowMovieActivity extends DaggerAppCompatActivity implements ShowMo
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(title);
         this.title.setText(title);
+    }
+
+    @Override
+    public void showSubTitle(String tagline) {
+        TextView subTitle = findViewById(R.id.tagline);
+        subTitle.setVisibility(View.VISIBLE);
+        subTitle.setText(tagline);
     }
 
     @Override

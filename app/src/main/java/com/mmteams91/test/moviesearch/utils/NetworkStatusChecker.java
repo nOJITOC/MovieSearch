@@ -19,12 +19,12 @@ public class NetworkStatusChecker {
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
-    public Boolean isNetworkAvailable() {
+    public Boolean isNet() {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    public Observable<Boolean> isNetworkAvailableReactive() {
-        return Observable.just(isNetworkAvailable());
+    public Observable<Boolean> isNetworkAvailable() {
+        return Observable.just(isNet());
     }
 }

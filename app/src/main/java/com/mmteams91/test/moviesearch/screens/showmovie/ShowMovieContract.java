@@ -32,5 +32,7 @@ public class ShowMovieContract {
         String getLanguage();
 
         String getLocalizedString(@StringRes int stringId);
+
+        void showSubTitle(String tagline);
     }
 }

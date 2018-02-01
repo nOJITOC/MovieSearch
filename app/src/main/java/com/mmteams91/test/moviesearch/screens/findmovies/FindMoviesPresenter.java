@@ -3,10 +3,11 @@ package com.mmteams91.test.moviesearch.screens.findmovies;
 import android.util.Log;
 
 import com.mmteams91.test.moviesearch.data.managers.DataManager;
-import com.mmteams91.test.moviesearch.data.network.NetworkObserver;
 import com.mmteams91.test.moviesearch.data.network.dto.ConfigureDto;
+import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
 import com.mmteams91.test.moviesearch.di.ActivityScope;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by Михаил on 29.01.2018.
@@ -28,24 +30,30 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
     private int page = 1;
     private int pageCount = 1;
     private String language;
+    List<FindMovieDto> findMovies;
+    CompositeDisposable disposable = new CompositeDisposable();
 
     @Inject
     public FindMoviesPresenter(DataManager dataManager) {
+        Log.e(TAG, "FindMoviesPresenter() ");
         this.dataManager = dataManager;
+        findMovies = new ArrayList<>();
     }
 
     @Override
     public void takeView(FindMoviesContract.View view) {
         this.view = view;
-        dataManager
+        disposable.add(dataManager
                 .loadConfig()
-                .subscribe(new NetworkObserver<ConfigureDto>() {
-                    @Override
-                    public void onNext(ConfigureDto value) {
-                        saveConfig(value);
-                    }
-                });
+                .subscribe(this::saveConfig, view::showError));
 
+    }
+
+    @Override
+    public void onResume() {
+        if (query != null && !query.isEmpty())
+            view.setQueryString(query);
+        view.setMoviesDtoContainer(findMovies);
     }
 
     private void saveConfig(ConfigureDto configureDto) {
@@ -67,21 +75,31 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
         language = checkLanguage(query);
         this.query = query;
         page = 1;
-        view.clearPrevResult();
+        findMovies = new ArrayList<>();
+        view.setMoviesDtoContainer(findMovies);
         findNextMovies();
     }
 
     private void findNextMovies() {
         if (pageCount >= page) {
-            dataManager.findMovies(query, language, page)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(movieRes -> {
-                        pageCount = movieRes.getTotalPages();
-                        if (view != null)
-                            view.addMovies(movieRes.getResults());
-                    }, throwable -> Log.e(TAG, "accept: ", throwable));
+            disposable.add(
+                    dataManager.findMovies(query, language, page)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(movieRes -> {
+                                pageCount = movieRes.getTotalPages();
+                                addMovies(movieRes.getResults());
+                            }, throwable -> view.showError(throwable))
+            );
             page++;
         }
+    }
+
+    private void addMovies(List<FindMovieDto> movieDtos) {
+        int startIndex = findMovies.size();
+        int count = movieDtos.size();
+        findMovies.addAll(movieDtos);
+        if (view != null)
+            view.showMovies(startIndex, count);
     }
 
     private String checkLanguage(String query) {
@@ -119,6 +137,7 @@ public class FindMoviesPresenter implements FindMoviesContract.Presenter {
 
     @Override
     public void dropView() {
+        disposable.clear();
         this.view = null;
     }
 }

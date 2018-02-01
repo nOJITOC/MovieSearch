@@ -3,6 +3,17 @@
     <string name="app_name">Movies</string>
     <string name="title_activity_show_movie">ShowMovieActivity</string>
     <string name="search_title">Search movie</string>
-    <string name="find_movie_title">Movie</string>
-    <string name="overview">Описание</string>
+    <string name="find_movie_title">Search movies</string>
+    <string name="overview">Overview</string>
+    <string name="release_date">Release date</string>
+    <string name="genre">Genre</string>
+    <string name="country">Country</string>
+    <string name="company">Production company</string>
+    <string name="budget">Budget</string>
+    <string name="language">Language</string>
+    <string name="vote">Vote</string>
+    <string name="homepage">Homepage</string>
+    <string name="popularity">Popularity</string>
+    <string name="runtime">Runtime</string>
+    <string name="revenue">Revenue</string>
 </resources>

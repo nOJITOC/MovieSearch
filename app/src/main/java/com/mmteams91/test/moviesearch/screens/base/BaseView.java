@@ -5,4 +5,5 @@ package com.mmteams91.test.moviesearch.screens.base;
  */
 
 public interface BaseView<T> {
+    void showError(Throwable throwable);
 }

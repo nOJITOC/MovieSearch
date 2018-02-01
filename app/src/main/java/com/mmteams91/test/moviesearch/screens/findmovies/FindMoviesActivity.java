@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mmteams91.test.moviesearch.R;
 import com.mmteams91.test.moviesearch.data.network.dto.FindMovieDto;
@@ -46,15 +48,22 @@ public class FindMoviesActivity extends DaggerAppCompatActivity implements FindM
     FindMoviesContract.Presenter presenter;
     private RecyclerView moviesContainer;
     private FindMoviesAdapter adapter;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.e(TAG, "onDestroy: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_movie);
-        presenter.takeView(this);
         prepareToolbar();
         prepareMoviesContainer(presenter.getImageUri());
+        presenter.takeView(this);
+    }
+
+    @Override
+    protected void onResume() {
+        presenter.onResume();
+        super.onResume();
     }
 
     private void prepareToolbar() {
@@ -76,7 +85,8 @@ public class FindMoviesActivity extends DaggerAppCompatActivity implements FindM
         adapter = new FindMoviesAdapter(imageUri);
         moviesContainer.setAdapter(adapter);
         int itemSpacing = getResources().getDimensionPixelSize(R.dimen.margin_item_find_movie);
-        moviesContainer.addItemDecoration(new GridSpacingItemDecoration(3, itemSpacing));
+        int spanCount = ((GridLayoutManager) moviesContainer.getLayoutManager()).getSpanCount();
+        moviesContainer.addItemDecoration(new GridSpacingItemDecoration(spanCount, itemSpacing));
         adapter.setOnLastItemBindListener(() -> presenter.onLastItemBind());
         adapter.setOnItemClickListener((view, item) -> {
             ImageView poster = (ImageView) ((ViewGroup) view).getChildAt(0);
@@ -86,8 +96,18 @@ public class FindMoviesActivity extends DaggerAppCompatActivity implements FindM
     }
 
     @Override
-    public void addMovies(List<FindMovieDto> movies) {
-        adapter.addItems(movies);
+    public void showError(Throwable throwable) {
+        runOnUiThread(()-> Toast.makeText(this, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    @Override
+    public void setMoviesDtoContainer(List<FindMovieDto> findMovies) {
+        adapter.setData(findMovies);
+    }
+
+    @Override
+    public void showMovies(int startIndex, int count) {
+        adapter.notifyItemRangeInserted(startIndex, count);
     }
 
     @Override
@@ -101,11 +121,6 @@ public class FindMoviesActivity extends DaggerAppCompatActivity implements FindM
             locale = ims.getLanguageTag();
         } else locale = ims.getLocale();
         return locale;
-    }
-
-    @Override
-    public void clearPrevResult() {
-        adapter.clear();
     }
 
     @Override
@@ -130,10 +145,7 @@ public class FindMoviesActivity extends DaggerAppCompatActivity implements FindM
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -148,6 +160,12 @@ public class FindMoviesActivity extends DaggerAppCompatActivity implements FindM
         });
 
         return true;
+    }
+
+    @Override
+    public void setQueryString(String query) {
+        if (searchView != null)
+            searchView.setQuery(query, false);
     }
 
     public void showMovie(ImageView poster, View view, FindMovieDto movie, String language) {

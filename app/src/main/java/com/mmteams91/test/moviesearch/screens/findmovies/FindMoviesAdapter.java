@@ -83,6 +83,11 @@ public class FindMoviesAdapter extends RecyclerView.Adapter<FindMoviesAdapter.Mo
         return movies.size();
     }
 
+    public void setData(List<FindMovieDto> data) {
+        this.movies = data;
+        notifyDataSetChanged();
+    }
+
     public class MovieViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView title;

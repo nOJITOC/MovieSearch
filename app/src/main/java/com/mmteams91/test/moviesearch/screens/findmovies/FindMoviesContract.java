@@ -20,17 +20,22 @@ public interface FindMoviesContract {
         String getLanguage();
 
         String getImageUri();
+
+        void onResume();
     }
 
     interface View extends Screen<Presenter> {
-        void addMovies(List<FindMovieDto> movies);
 
         String getKeyboardLocale();
-
-        void clearPrevResult();
 
         int getDisplayWidth();
 
         int getMovieContainerPadding();
+
+        void setMoviesDtoContainer(List<FindMovieDto> findMovies);
+
+        void showMovies(int startIndex, int count);
+
+        void setQueryString(String query);
     }
 }

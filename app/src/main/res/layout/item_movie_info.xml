@@ -12,5 +12,7 @@
 
     <TextView
         style="@style/TextData"
+        android:autoLink="web"
+        android:linksClickable="true"
         tools:text="Russia, Argentina" />
 </LinearLayout>
