@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Поиск фильмов</string>
+    <string name="title_activity_show_movie">Фильм</string>
+    <string name="search_title">искать фильм</string>
+    <string name="find_movie_title">Поиск фильмов</string>
+    <string name="overview">Описание</string>
+    <string name="release_date">Дата выхода</string>
+    <string name="genre">Жанр</string>
+    <string name="country">Страна</string>
+    <string name="company">Киностудия</string>
+    <string name="budget">Бюджет</string>
+    <string name="language">Язык</string>
+    <string name="vote">Рейтинг</string>
+    <string name="homepage">Домашняя страница</string>
+    <string name="popularity">Популярность</string>
+    <string name="runtime">Прокат</string>
+    <string name="revenue">Доход</string>
+</resources>
